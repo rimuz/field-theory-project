@@ -16,11 +16,12 @@ function [S11,S12,S21,S22] = aperture_S(n_t1, n_t2, n_z1, n_z2, M, N, k1, k2, x1
                 (sin(n_p*x2 - n_t1(m)*x1) - sin(n_t2(n)*x1))/n_p);
         end
     end
-    
+
     Z1 = (eta*k1)/n_z1;
     Z2 = (eta*k2)/n_z2;
-    D1 = diag(Z1./abs(Z1));
-    D2 = diag(Z2./abs(Z2));
+
+    D1 = diag(1); % diag(Z1./abs(Z1))
+    D2 = diag(1); % diag(Z2./abs(Z2))
     
     % Compendium page 121
     S11 = inv(conj(D1) + conj(C)*inv(D2)*C.') * (conj(D1) - conj(C)*inv(D2)*C.');
