@@ -2,9 +2,8 @@
 % 2024-02-05 Martin Norgren
 
 % Pre-calculated scattering parameters
-load('S_Block.mat'); % From a frequency blocking the passage
-% load('S_Pass.mat'); % From a frequency with almost total passage
-
+%load('S_Block.mat'); % From a frequency blocking the passage
+%load('S_Pass.mat'); % From a frequency with almost total passage
 
 f=frekvens;
 
@@ -15,21 +14,24 @@ w = 2*pi*f;
 k = w/c;
 
 % Sizes of the apertures
-a1 = pi/2*1e-2;    % 1.571 cm
-a2 = 5e-2;         % 5 cm
-a3 = pi/3*1e-2;    % 1.047 cm
+a1 = 1.5e-2;  % 1.5cm
+a2 = pi*1e-2; % 3.14 cm
+a3 = 1e-2;    % 1cm
 
 % Location of apertures
-xoff1 = 2e-2;      % 2 cm
+xoff1 = 1e-2;      % 1 cm
 xoff2 = 0;         % 0 cm
-xoff3 = 1e-2;      % 1 cm
+xoff3 = 5e-3;      % 0.5 cm
+
+% Length of middle cavity
+delta_z = 3e-2; % 3cm
 
 % Geometrical parameters of the waveguides, used for the precalculated
 % S-parameters
 % In each row x_min,x_max,z_min,z_max
-XZ = [ 30, 30+15.47, -30, 0; ...
-       0.4745, 0.4745+75.47*sqrt(1.0001), 0, 37.5; ...
-       7.5, 7.5+15, 37.5, 2*37.5]*0.01;
+XZ = [ xoff1, xoff+a1, -3e-2, 0; ...
+       xoff2, xoff2+a2, 0, delta_z; ...
+       xoff3, xoff3+a3, delta_z, delta_z+3e-2];
 xm = XZ(:,1); xM=XZ(:,2); zm=XZ(:,3); zM=XZ(:,4);
 
 a = xM - xm; % Waveguide widths
@@ -51,13 +53,8 @@ kz2 = ( ( k >= kx2 ) - 1i*( k < kx2 ) ) .* sqrt( abs( k^2 - kx2.^2 ) );
 kx3 = n3*pi/a(3); Prop3=min(find(k<kx3))-1;
 kz3 = ( ( k >= kx3 ) - 1i*( k < kx3 ) ) .* sqrt( abs( k^2 - kx3.^2 ) );
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Here you implement your own calculations of the scattering parameters,
-% which replace the precalculated ones
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calculation of S parameters
+[S11_R,S12_R,S21_R,S22_R] = aperture_S(kx1, n_t2, M, N, k, k, xoff1, a1, a2)
 
 % Excitation coefficients of incoming modes
 a1p = zeros(size(n1)); a1p(1)=0;
@@ -143,4 +140,3 @@ contour(Z3,X3,real(EY_3*exp(1i*w*t)),V,'-k');
 end
 
 movie( film1, 10, 15 )
-
