@@ -6,9 +6,9 @@ clc
 c = 299792458;
 
 % Sizes of the apertures
-a1 = 1.5e-2;  % 1.5cm
-a2 = 2*pi*1e-2; % 3.14 cm
-a3 = 1e-2;    % 1cm
+a1 = 15e-2;  % 1.5cm
+a2 = pi*10*1e-2; % 3.14 cm
+a3 = 7.5e-2;    % 1cm
 
 % Location of apertures
 xoff1 = 1e-2;      % 1 cm
@@ -42,10 +42,10 @@ S21_LR = zeros(length(w), 1);
 S22_LR = zeros(length(w), 1);
 
 for i = 1:length(w)
-    n_z1 = nzfromnt(n_t1, k(i));
-    n_z2 = nzfromnt(n_t2, k(i));
-    n_z3 = nzfromnt(n_t3, k(i));
-
+    n_z1 = ( ( k(i) >= n_t1 ) - 1i*( k(i) < n_t1 ) ) .* sqrt( abs( k(i)^2 - n_t1.^2 ) );
+    n_z2 = ( ( k(i) >= n_t2 ) - 1i*( k(i) < n_t2 ) ) .* sqrt( abs( k(i)^2 - n_t2.^2 ) );
+    n_z3 = ( ( k(i) >= n_t3 ) - 1i*( k(i) < n_t3 ) ) .* sqrt( abs( k(i)^2 - n_t3.^2 ) );
+    
     [S11_L(i), S12_L(i), S21_L(i), S22_L(i)] = aperture_S(n_t1, n_t2, n_z1, n_z2, 1, 1, k(i), k(i), xoff1, a1, a2);
     P = exp(-1i*n_z2*delta_z);
     [S22_R(i), S12_R(i), S21_R(i), S11_R(i)] = aperture_S(n_t3, n_t2, n_z3, n_z2, 1, 1, k(i), k(i), xoff3, a3, a2);

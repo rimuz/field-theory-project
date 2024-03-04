@@ -1,11 +1,13 @@
 % Course material in EI2410 Fältteori för vågledare
 % 2024-02-05 Martin Norgren
+clc
+clear all
 
 % Pre-calculated scattering parameters
 %load('S_Block.mat'); % From a frequency blocking the passage
 %load('S_Pass.mat'); % From a frequency with almost total passage
 
-f=frekvens;
+f=1.6625e+09;
 
 c=299792458;
 % n_max = 70; % Number of modes in the widest of the waveguides
@@ -14,34 +16,40 @@ w = 2*pi*f;
 k = w/c;
 
 % Sizes of the apertures
-a1 = 1.5e-2;  % 1.5cm
-a2 = pi*1e-2; % 3.14 cm
-a3 = 1e-2;    % 1cm
+a1 = 15.47e-2;  % 1.5cm
+a2 = 75.47*sqrt(1.0001)*1e-2; % 3.14 cm
+a3 = 15e-2;    % 1cm
 
 % Location of apertures
-xoff1 = 1e-2;      % 1 cm
+xoff1 = 30e-2;      % 1 cm
 xoff2 = 0;         % 0 cm
-xoff3 = 5e-3;      % 0.5 cm
+xoff3 = 7.5e-3;      % 0.5 cm
 
 % Length of middle cavity
-delta_z = 3e-2; % 3cm
+delta_z = 37.5e-2; % 3cm
 
 % Geometrical parameters of the waveguides, used for the precalculated
 % S-parameters
 % In each row x_min,x_max,z_min,z_max
-XZ = [ xoff1, xoff+a1, -3e-2, 0; ...
+XZ = [ xoff1, xoff1+a1, -30e-2, 0; ...
        xoff2, xoff2+a2, 0, delta_z; ...
-       xoff3, xoff3+a3, delta_z, delta_z+3e-2];
+       xoff3, xoff3+a3, delta_z, delta_z+37.5e-2];
 xm = XZ(:,1); xM=XZ(:,2); zm=XZ(:,3); zM=XZ(:,4);
 
 a = xM - xm; % Waveguide widths
 
 % n1 = (1:round(a(1)/max(a)*n_max)).'; 
 % n2 = (1:round(a(2)/max(a)*n_max)).'; 
-% n3 = (1:round(a(3)/max(a)*n_max)).'; 
+% n3 = (1:round(a(3)/max(a)*n_max)).';
 [dum2,dum1] = size(PP_12); n1 = (1:dum1).'; n2 = (1:dum2).'; 
 [dum2,dum3] = size(MP_23); n3 = (1:dum3).'; 
 l1 = length(n1); l2 = length(n2); l3 = length(n3);
+l1 = 14;
+l2 = 70;
+l3 = 14;
+n1 = 
+
+
 
 % Wavenumbers
 kx1 = n1*pi/a(1); Prop1=min(find(k<kx1))-1;
@@ -53,8 +61,21 @@ kz2 = ( ( k >= kx2 ) - 1i*( k < kx2 ) ) .* sqrt( abs( k^2 - kx2.^2 ) );
 kx3 = n3*pi/a(3); Prop3=min(find(k<kx3))-1;
 kz3 = ( ( k >= kx3 ) - 1i*( k < kx3 ) ) .* sqrt( abs( k^2 - kx3.^2 ) );
 
+
 % Calculation of S parameters
-[S11_R,S12_R,S21_R,S22_R] = aperture_S(kx1, n_t2, M, N, k, k, xoff1, a1, a2)
+[S11_L, S12_L, S21_L, S22_L] = aperture_S(kx1, kx2, kz1, kz2, l1, l2, k, k, xoff1, a1, a2);
+
+[S33_R, S32_R, S23_R, S22_R] = aperture_S(kx3, kx2, kz3, kz2, l3, l2, k, k, xoff3, a3, a2);
+
+P = diag(exp(-1i*kz2*delta_z));
+[S11_LP,S12_LP,S21_LP,S22_LP] = combineLR(S11_L,S12_L,S21_L,S22_L,zeros(l2),P,P,zeros(l2));
+[S22_PR, S23_PR, S32_PR, S33_PR] = combineLR(zeros(l2),P,P,zeros(l2),S22_R,S23_R,S32_R,S33_R);
+
+[S11_13, S12_13, S21_13, S22_13] = combineLR(S11_L,S12_L,S21_L,S22_L,S22_PR,S23_PR,S32_PR,S33_PR);
+PP_12 = inv(eye(l2) - S22_L*S22_PR) * S21_L;
+PM_12 = inv(eye(l2) - S22_L*S22_PR) * (S22_L*S23_PR);
+MP_23 = inv(eye(l2) - S22_R*S22_LP) * (S22_R*S21_LP);
+MM_23 = inv(eye(l2) - S22_R*S22_LP) * S23_R;
 
 % Excitation coefficients of incoming modes
 a1p = zeros(size(n1)); a1p(1)=0;
