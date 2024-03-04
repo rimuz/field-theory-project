@@ -16,7 +16,7 @@ xoff2 = 0;         % 0 cm
 xoff3 = 5e-3;      % 0.5 cm
 
 % Length of the middle waveguide
-delta_z = 3e-2     % 3 cm
+delta_z = 3e-2;     % 3 cm
 
 w = 0:10e7:100e9;
 k = w/c;
@@ -74,8 +74,8 @@ xlabel("Frequency [Hz]");
 % with height a2, a1 < a2. x1 is the offset of the aperture, n_t1 and n_t2
 % the eigenvalues at the two waveguides, M is the number of modes.
 function [S11,S12,S21,S22] = aperture_S(n_t1, n_t2, M, k1, k2, x1, a1, a2) 
-    n_z1 = sqrt(k1^2 - n_t1.^2)
-    n_z2 = sqrt(k2^2 - n_t2.^2)
+    n_z1 = sqrt(k1^2 - n_t1.^2);
+    n_z2 = sqrt(k2^2 - n_t2.^2);
     x2 = x1 + a1;
 
     C = zeros(M, M);
