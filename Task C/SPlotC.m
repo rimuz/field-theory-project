@@ -20,7 +20,7 @@ xoff4 = 30e-2;
 % Length of middle cavity
 delta_z = 37.5e-2; % 3cm
 
-w = (14.99e9:10e6:20e9)*2*pi;
+w = (1e9:10e6:3e9)*2*pi;
 f = w /2/pi;
 k = w/c;
 
@@ -28,6 +28,14 @@ n_t1 = pi/a1;
 n_t2 = pi/a2;
 n_t3 = pi/a3;
 n_t4 = pi/a4; 
+
+fprintf("Cutoff frequency TE10 a1: %d\n", (n_t1*c/(2*pi)));
+fprintf("Cutoff frequency TE10 a3: %d\n", (n_t3*c/(2*pi)));
+fprintf("Cutoff frequency TE10 a3: %d\n", (n_t4*c/(2*pi)));
+fprintf("Cutoff frequency TE20 a1: %d\n", (2*n_t1*c/(2*pi)));
+fprintf("Cutoff frequency TE20 a3: %d\n", (2*n_t3*c/(2*pi)));
+fprintf("Cutoff frequency TE20 a3: %d\n", (2*n_t4*c/(2*pi)));
+%Range: 1e9 - 1.577e9
 
 S11_LR = zeros(length(w), 1);
 S12_LR = zeros(length(w), 1);
@@ -65,80 +73,126 @@ end
 
 tiledlayout(4,3);
 nexttile;
-plot(f, abs(S11_LR), "b");
+plot(f./1e9, abs(S11_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S11_LR), "r");
-title("S11");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S11_LR), "r");
+plot(f./1e9, real(S11_LR), "b");
+title("S_{11}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
+legend({'Magnitude','Imaginary','Real'},'Location','northwest')
 
 nexttile;
-plot(f, abs(S12_LR), "b");
+plot(f./1e9, abs(S12_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S12_LR), "r");
-title("S12");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S12_LR), "r");
+plot(f./1e9, real(S12_LR), "b");
+title("S_{12}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S13_LR), "b");
+plot(f./1e9, abs(S13_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S13_LR), "r");
-title("S13");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S13_LR), "r");
+plot(f./1e9, real(S13_LR), "b");
+title("S_{13}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S21_LR), "b");
+plot(f./1e9, abs(S21_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S21_LR), "r");
-title("S21");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S21_LR), "r");
+plot(f./1e9, real(S21_LR), "b");
+title("S_{21}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S22_LR), "b");
+plot(f./1e9, abs(S22_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S22_LR), "r");
-title("S22");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S22_LR), "r");
+plot(f./1e9, real(S22_LR), "b");
+title("S_{22}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S23_LR), "b");
+plot(f./1e9, abs(S23_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S23_LR), "r");
-title("S23");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S23_LR), "r");
+plot(f./1e9, real(S23_LR), "b");
+title("S_{23}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 
 nexttile;
-plot(f, abs(S31_LR), "b");
+plot(f./1e9, abs(S31_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S31_LR), "r");
-title("S31");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S31_LR), "r");
+plot(f./1e9, real(S31_LR), "b");
+title("S_{31}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S32_LR), "b");
+plot(f./1e9, abs(S32_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S32_LR), "r");
-title("S32");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S32_LR), "r");
+plot(f./1e9, real(S32_LR), "b");
+title("S_{32}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S33_LR), "b");
+plot(f./1e9, abs(S33_LR), "g", LineWidth=2);
 hold on;
-plot(f, imag(S33_LR), "r");
-title("S33");
-xlabel("Frequency [Hz]");
+plot(f./1e9, imag(S33_LR), "r");
+plot(f./1e9, real(S33_LR), "b");
+title("S_{33}");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S11_LR).^2 + abs(S12_LR).^2 + abs(S13_LR).^2);
-title("S11^2 + S12^2 + S13^2");
-xlabel("Frequency [Hz]");
+plot(f./1e9, abs(S11_LR).^2 + abs(S12_LR).^2 + abs(S13_LR).^2);
+title("|S_{11}|^2 + |S_{12}|^2 + |S_{13}|^2");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S22_LR).^2 + abs(S21_LR).^2 + abs(S23_LR).^2);
-title("S21^2 + S22^2 + S23^2");
-xlabel("Frequency [Hz]");
+plot(f./1e9, abs(S22_LR).^2 + abs(S21_LR).^2 + abs(S23_LR).^2);
+title("|S_{21}|^2 + |S_{22}|^2 + |S_{23}|^2");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
 
 nexttile;
-plot(f, abs(S31_LR).^2 + abs(S32_LR).^2 + abs(S33_LR).^2);
-title("S31^2 + S32^2 + S33^2");
-xlabel("Frequency [Hz]");
+plot(f./1e9, abs(S31_LR).^2 + abs(S32_LR).^2 + abs(S33_LR).^2);
+title("|S_{31}|^2 + |S_{32}|^2 + |S_{33}|^2");
+xlim([0.9 inf])
+xline(1, '--')
+xline(1.578, '--')
+xlabel("Frequency [GHz]");
