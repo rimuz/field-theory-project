@@ -5,7 +5,7 @@
 function [S11,S12,S21,S22] = two_apertures_S(n_t1, n_t2, n_t3, n_z1, n_z2, n_z3, M, N, P, k1, k2, k3, x1, y1, a1, a2, a3) 
     eta = 376.7287537;
     x2 = x1 + a1;
-    y2 = y1 + a2;
+    y2 = y1 + a3;
 
     C1 = zeros(M, N);
     for m = 1:M
