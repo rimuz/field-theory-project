@@ -31,13 +31,13 @@ function [S11,S12,S21,S22] = two_apertures_S(n_t1, n_t2, n_t3, n_z1, n_z2, n_z3,
         end
     end
 
-    C = [C1; C2];
+    C = [C1 zeros(M,N); zeros(P,N) C2];
 
     Z1 = (eta*k1)./n_z1;
     Z2 = (eta*k2)./n_z2;
     Z3 = (eta*k3)./n_z3;
     D1 = [diag(Z1./abs(Z1)) zeros(M,P); zeros(P,M) diag(Z3./abs(Z3))];
-    D2 = diag(Z2./abs(Z2)); 
+    D2 = [diag(Z2./abs(Z2)) zeros(N,N); zeros(N,N) diag(Z2./abs(Z2))]; 
     
 
     % Compendium page 121
